@@ -3,6 +3,18 @@ class Board {
     this.terrains = terrains;
     this.values = values;
 
+    /*
+    Overview:
+      this.tiles stores the Tile objects associated with this Board object.
+      this.tiles[tileId] returns the Tile object associated with the requesting tileId.
+    Diagram:
+      Note: This diagram shows what position on the board each tileId correpsonds to.
+        0 1 2
+       3 4 5 6
+      7 8 9 . .
+       . . . .
+        . . .
+    */
     this.tiles = [];
   }
 
@@ -47,6 +59,50 @@ class Board {
     }
   }
 
+  assignVertex(vertex, tileId, tileVertex) {
+    this.tiles[tileId].vertices[tileVertex] = vertex;
+  }
+
+  buildFirstVertex(multiplier, tile, tileVertex) {
+    var vertex = new Vertex();
+    var connectedTiles = [];
+    this.assignVertex(vertex, tile.id, tileVertex);
+    connectedTiles.push(tile.id);
+    if(tile.adjacentTiles.includes(tile.id - multiplier)) {
+      connectedTiles.push(tile.id - multiplier);
+      this.assignVertex(vertex, tile.id - multiplier, multiplier === 1 ? "v1" : "v4");
+    }
+    if(tile.adjacentTiles.includes(tile.id - multiplier * (5 - tile.rowsFromCenter))) {
+      connectedTiles.push(tile.id - multiplier * (5 - tile.rowsFromCenter));
+      this.assignVertex(vertex, tile.id - multiplier * (5 - tile.rowsFromCenter), multiplier === 1 ? "v3" : "v0");
+    }
+    vertex.connectedTiles = connectedTiles;
+  }
+
+  buildSecondVertex(multiplier, tile, tileVertex) {
+    var vertex = new Vertex();
+    var connectedTiles = [];
+    connectedTiles.push(tile.id);
+    this.assignVertex(vertex, tile.id, tileVertex);
+    if(tile.adjacentTiles.includes(tile.id - multiplier * (5 - tile.rowsFromCenter))) {
+      connectedTiles.push(tile.id - multiplier * (5 - tile.rowsFromCenter));
+      this.assignVertex(vertex, tile.id - multiplier * (5 - tile.rowsFromCenter), multiplier === 1 ? "v2" : "v5");
+    }
+    if(tile.adjacentTiles.includes(tile.id - multiplier * (5 - tile.rowsFromCenter) + multiplier)) {
+      connectedTiles.push(tile.id - multiplier * (5 - tile.rowsFromCenter) + multiplier);
+      this.assignVertex(vertex, tile.id - multiplier * (5 - tile.rowsFromCenter) + multiplier, multiplier === 1 ? "v4" : "v1");
+    }
+    vertex.connectedTiles = connectedTiles;
+  }
+
+  buildThirdVertex(tile, tileVertex) {
+    var vertex = new Vertex();
+    var connectedTiles = [];
+    connectedTiles.push(tile)
+    this.assignVertex(vertex, tile.id, tileVertex);
+    vertex.connectedTiles = connectedTiles;
+  }
+
   generateVertices() {
     for(let multiplier = 1; multiplier > -2; multiplier -= 2) {
       let start = 0;
@@ -67,41 +123,11 @@ class Board {
           verticesToAlter.push("v4");
         }
 
-        let connectedTiles = [tile.id];
+        this.buildFirstVertex(multiplier, tile, verticesToAlter[0]);
+        this.buildSecondVertex(multiplier, tile, verticesToAlter[1]);
 
-        var v = new Vertex([]);
-        tile.vertices[verticesToAlter[0]] = v;
-        if(tile.adjacentTiles.includes(tile.id - multiplier)) {
-          connectedTiles.push(tile.id - multiplier);
-          let nec = multiplier === 1 ? "v1" : "v4";
-          this.tiles[tile.id - multiplier].vertices[nec] = v;
-        }
-        if(tile.adjacentTiles.includes(tile.id - multiplier * (5 - tile.rowsFromCenter))) {
-          connectedTiles.push(tile.id - multiplier * (5 - tile.rowsFromCenter));
-          let nec = multiplier === 1 ? "v3" : "v0";
-          this.tiles[tile.id - multiplier * (5 - tile.rowsFromCenter)].vertices[nec] = v;
-        }
-        v.connectedTiles = connectedTiles;
-
-        connectedTiles = [tile.id];
-
-        v = new Vertex([]);
-        tile.vertices[verticesToAlter[1]] = v;
-        if(tile.adjacentTiles.includes(tile.id - multiplier * (5 - tile.rowsFromCenter))) {
-          connectedTiles.push(tile.id - multiplier * (5 - tile.rowsFromCenter));
-          let nec = multiplier === 1 ? "v2" : "v5";
-          this.tiles[tile.id - multiplier * (5 - tile.rowsFromCenter)].vertices[nec] = v;
-        }
-        if(tile.adjacentTiles.includes(tile.id - multiplier * (5 - tile.rowsFromCenter) + multiplier)) {
-          connectedTiles.push(tile.id - multiplier * (5 - tile.rowsFromCenter) + multiplier);
-          let nec = multiplier === 1 ? "v4" : "v1";
-          this.tiles[tile.id - multiplier * (5 - tile.rowsFromCenter) + multiplier].vertices[nec] = v;
-        }
-        v.connectedTiles = connectedTiles;
-
-        v = new Vertex([tile.id]);
         if(verticesToAlter.length === 3) {
-          tile.vertices[verticesToAlter[2]] = v;
+          this.buildThirdVertex(tile, verticesToAlter[2]);
         }
       }
     }
@@ -190,8 +216,8 @@ class Tile {
 }
 
 class Vertex {
-  constructor(connectedTiles) {
-    this.connectedTiles = connectedTiles;
+  constructor() {
+    this.connectedTiles = [];
     this.connectedEdges = [];
 
     this.value = Math.floor(Math.random() * 3);
