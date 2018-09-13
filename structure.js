@@ -1,4 +1,32 @@
+/*
+Catan Board Data Structure:
+  Overview:
+    --> The Catan board consists of 19 tiles arranged in the shape of a hexagon.
+
+    Diagram:
+      Note: The "^" symbols represent tiles.
+        ^ ^ ^
+       ^ ^ ^ ^
+      ^ ^ ^ ^ ^
+       ^ ^ ^ ^
+        ^ ^ ^
+  Tiles:
+    --> The tiles are normal hexagons and have pointy orientation.
+    --> Each tile has 6 vertices and 6 edges.
+
+    Diagram:
+      Note: The "V" symbols represent vertices.
+           V
+      V         V
+
+      V         V
+           V
+*/
+
+
+
 class Board {
+
   constructor(terrains, values) {
     this.terrains = terrains;
     this.values = values;
@@ -16,6 +44,7 @@ class Board {
         . . .
     */
     this.tiles = [];
+    this.edges = [];
   }
 
   static get ROW_WIDTHS() {
@@ -134,7 +163,9 @@ class Board {
   }
 
   generateEdges() {
+
     for(let multiplier = 1; multiplier > -2; multiplier -= 2) {
+      let count = multiplier === 1 ? 0 : 71;
       let start = 0;
       let end = 12;
       if(multiplier === -1) {
@@ -142,39 +173,56 @@ class Board {
         end = 6;
       }
       for(let tileId = start; tileId !== end; tileId += multiplier) {
+        if(tileId === 3 || tileId === 15) {
+          count += multiplier * 4;
+        } else if(tileId === 7 || tileId === 11) {
+          count += multiplier * 5;
+        }
+
         let tile = this.tiles[tileId];
-        let verticesToAlter = ["v5", "v0"];
+        let vertexToAlter = "v0";
         if(multiplier === -1) {
-          verticesToAlter = ["v2", "v3"];
+          vertexToAlter = "v3";
         }
 
-        if(multiplier === 1 && (tileId === 2 || tileId === 6 || tileId === 11)) {
-          verticesToAlter.push("v1");
-        } else if(multiplier === -1 && (tileId === 16 || tileId === 12 || tileId === 7)) {
-          verticesToAlter.push("v4");
-        }
 
-        let vertex = tile.vertices[verticesToAlter[0]];
-        let nec = verticesToAlter[0] === "v5" ? ["v4", "v0"] : ["v1", "v3"];
+        let vertex = tile.vertices[vertexToAlter];
+        let nec = vertexToAlter === "v0" ? ["v5", "v1"] : ["v2", "v4"];
+
         for(let i = 0; i < nec.length; i++) {
-          let edge = new Edge([vertex, tile.vertices[nec[i]]]);
+          let edge = new Edge(count, [vertex, tile.vertices[nec[i]]]);
           vertex.connectedEdges.push(edge);
           tile.vertices[nec[i]].connectedEdges.push(edge);
+          this.edges[count] = edge;
+          count += multiplier;
         }
+      }
+    }
 
-        vertex = tile.vertices[verticesToAlter[1]];
-        nec = verticesToAlter[1] === "v0" ? "v1" : "v4";
-        let edge = new Edge([vertex, tile.vertices[nec]]);
-        vertex.connectedEdges.push(edge);
-        tile.vertices[nec].connectedEdges.push(edge);
+    let count = 6;
+    for(let tileId = 0; tileId < this.tiles.length; tileId++) {
+      let tile = this.tiles[tileId];
+      if(tileId === 3) {
+        count += 9;
+      } else if(tileId === 7) {
+        count += 11;
+      } else if(tileId === 12) {
+        count += 11;
+      } else if(tileId === 16) {
+        count += 9;
+      }
 
-        if(verticesToAlter.length === 3) {
-          let vertex = tile.vertices[verticesToAlter[2]];
-          let nec = verticesToAlter[2] === "v1" ? "v2" : "v5";
-          let edge = new Edge([vertex, tile.vertices[nec]]);
-          vertex.connectedEdges.push(edge);
-          tile.vertices[nec].connectedEdges.push(edge);
-        }
+      let edge = new Edge(count, [tile.vertices["v5"], tile.vertices["v4"]]);
+      tile.vertices["v5"].connectedEdges.push(edge);
+      tile.vertices["v4"].connectedEdges.push(edge);
+      this.edges[count] = edge;
+      count++;
+
+      if(tileId === 2 || tileId === 6 || tileId === 11 || tileId === 15 || tileId === 18) {
+        let edge = new Edge(count, [tile.vertices["v1"], tile.vertices["v2"]]);
+        tile.vertices["v1"].connectedEdges.push(edge);
+        tile.vertices["v2"].connectedEdges.push(edge);
+        this.edges[count] = edge;
       }
     }
   }
@@ -225,7 +273,8 @@ class Vertex {
 }
 
 class Edge {
-    constructor(connectedVertices) {
+    constructor(id, connectedVertices) {
+      this.id = id
       this.connectedVertices = connectedVertices;
 
       this.value = Math.floor(Math.random() * 2);
