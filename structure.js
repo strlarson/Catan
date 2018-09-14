@@ -1,7 +1,8 @@
 /*
-Catan Board Data Structure:
-  Overview:
+Catan Board Data Structure Overview:
+  Board:
     --> The Catan board consists of 19 tiles arranged in the shape of a hexagon.
+    --> There are 54 vertices and 72 edges.
 
     Diagram:
       Note: The "^" symbols represent tiles.
@@ -21,6 +22,10 @@ Catan Board Data Structure:
 
       V         V
            V
+  Vertices:
+    --> Each vertex has either 2 or 3 connecting edges.
+  Edges:
+    --> Each edge has 2 connecting vertices.
 */
 
 
@@ -44,6 +49,7 @@ class Board {
         . . .
     */
     this.tiles = [];
+    this.vertices = [];
     this.edges = [];
   }
 
@@ -132,10 +138,23 @@ class Board {
     vertex.connectedTiles = connectedTiles;
   }
 
+  genVertices() {
+    for(let vertexId = 0; vertexId < vertexData.length; vertexId++) {
+      let data = vertexData[vertexId];
+      let data2 = vertexData2[vertexId];
+      let vertex = new Vertex(vertexId, data, data2);
+      for(let i = 0; i < data.length; i++) {
+        let connectedTile = data[i];
+        this.tiles[connectedTile[0]].vertices[connectedTile[1]] = vertex;
+      }
+    }
+  }
+
   generateVertices() {
     for(let multiplier = 1; multiplier > -2; multiplier -= 2) {
       let start = 0;
       let end = 12;
+      let vertexCount = 0;
       if(multiplier === -1) {
         start = this.tiles.length - 1;
         end = 6;
@@ -260,13 +279,15 @@ class Tile {
            v3
     */
     this.vertices = {"v0": null, "v1": null, "v2": null, "v3": null, "v4": null, "v5": null};
+    this.edges = [];
   }
 }
 
 class Vertex {
-  constructor() {
-    this.connectedTiles = [];
-    this.connectedEdges = [];
+  constructor(id, connectedTiles, connectedEdges) {
+    this.id = id
+    this.connectedTiles = connectedTiles;
+    this.connectedEdges = connectedEdges;
 
     this.value = Math.floor(Math.random() * 3);
   }
