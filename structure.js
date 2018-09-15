@@ -3,7 +3,7 @@ Catan Board Data Structure Overview:
   Board:
     --> The Catan board consists of 19 tiles arranged in the shape of a hexagon.
     --> There are 54 vertices and 72 edges.
-
+    
     Diagram:
       Note: The "^" symbols represent tiles.
         ^ ^ ^
@@ -11,6 +11,7 @@ Catan Board Data Structure Overview:
       ^ ^ ^ ^ ^
        ^ ^ ^ ^
         ^ ^ ^
+
   Tiles:
     --> The tiles are normal hexagons and have pointy orientation.
     --> Each tile has 6 vertices and 6 edges.
@@ -22,8 +23,10 @@ Catan Board Data Structure Overview:
 
       V         V
            V
+
   Vertices:
     --> Each vertex has either 2 or 3 connecting edges.
+
   Edges:
     --> Each edge has 2 connecting vertices.
 */
@@ -143,9 +146,23 @@ class Board {
       let data = vertexData[vertexId];
       let data2 = vertexData2[vertexId];
       let vertex = new Vertex(vertexId, data, data2);
+      this.vertices[vertexId] = vertex;
       for(let i = 0; i < data.length; i++) {
         let connectedTile = data[i];
         this.tiles[connectedTile[0]].vertices[connectedTile[1]] = vertex;
+      }
+    }
+  }
+
+  genEdges() {
+    for(let edgeId = 0; edgeId < edgeData.length; edgeId++) {
+      let data = edgeData[edgeId];
+      let data2 = edgeData2[edgeId];
+      let edge = new Edge(edgeId, data, data2);
+      this.edges[edgeId] = edge;
+      for(let i = 0; i < data.length; i++) {
+        let connectedTile = data[i];
+        this.tiles[connectedTile[0]].edges[connectedTile[1]] = edge;
       }
     }
   }
@@ -278,7 +295,7 @@ class Tile {
       v4        v2
            v3
     */
-    this.vertices = {"v0": null, "v1": null, "v2": null, "v3": null, "v4": null, "v5": null};
+    this.vertices = [];
     this.edges = [];
   }
 }
@@ -294,8 +311,9 @@ class Vertex {
 }
 
 class Edge {
-    constructor(id, connectedVertices) {
+    constructor(id, connectedTiles, connectedVertices) {
       this.id = id
+      this.connectedTiles = connectedTiles;
       this.connectedVertices = connectedVertices;
 
       this.value = Math.floor(Math.random() * 2);
@@ -306,6 +324,6 @@ var board = new Board([], []);
 console.log(Board.ROW_WIDTHS);
 console.log(Board.ADJACENT_TILES_LIST);
 board.initialize();
-board.generateVertices();
-board.generateEdges();
+board.genVertices();
+board.genEdges();
 console.log(board);
