@@ -1,0 +1,57 @@
+body {
+  overflow: hidden;
+
+  margin: 0px;
+}
+
+#content-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#board-canvas-container {
+  border-style: double;
+
+  background-color: #0077BE;
+}
+
+/* #board-canvas {
+  background-color: #0077BE;
+} */
+
+#left-sidebar-container {
+  /* display: flex;
+  flex-wrap: wrap; */
+
+  border-style: solid none solid solid;
+
+  background-color: #6F4E37;
+}
+
+.player-info-container {
+  border-style: solid;
+}
+
+#player-1 {
+  background-color: #98AFC7;
+}
+
+#player-2 {
+  background-color: #98AFC7;
+}
+#player-3 {
+  background-color: #98AFC7;
+}
+#player-4 {
+  background-color: #98AFC7;
+}
+
+#right-sidebar-container {
+  border-style: solid solid solid none;
+
+  background-color: #6F4E37
+}
+
+/* #chat-box {
+  background-color: #98AFC7;
+} */
