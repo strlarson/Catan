@@ -12,7 +12,8 @@ body {
 #board-canvas-container {
   border-style: double;
 
-  background-color: #0077BE;
+  background-image: radial-gradient(#0077BE, #00008B);
+  /* background-color: #0077BE; */
 }
 
 /* #board-canvas {
@@ -25,7 +26,8 @@ body {
 
   border-style: solid none solid solid;
 
-  background-color: #6F4E37;
+  /* background-image: linear-gradient(to bottom right, #3498DB, #27AE60); */
+  background-color:  #6F4E37;
 }
 
 .player-info-container {
@@ -33,17 +35,17 @@ body {
 }
 
 #player-1 {
-  background-color: #98AFC7;
+  background-color: #737CA1;
 }
 
 #player-2 {
-  background-color: #98AFC7;
+  background-color: #737CA1;
 }
 #player-3 {
-  background-color: #98AFC7;
+  background-color: #737CA1;
 }
 #player-4 {
-  background-color: #98AFC7;
+  background-color: #737CA1;
 }
 
 #right-sidebar-container {
@@ -52,6 +54,14 @@ body {
   background-color: #6F4E37
 }
 
-/* #chat-box {
-  background-color: #98AFC7;
-} */
+#chat-box {
+  border-style: none none solid none;
+
+  background-color: #737CA1;
+}
+
+#action-container {
+  border-style: solid;
+
+  background-color: #737CA1;
+}

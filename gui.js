@@ -25,7 +25,7 @@ class Gui {
     let totalWidth =  6 * (Math.sqrt(3) * hexagonRadius);
     let totalHeight = this.contentHeight;
 
-    let borderSize = this.contentWidth * 0.003;
+    let borderSize = this.contentWidth * 0.0075;
     let contentWidth = totalWidth - 2 * borderSize;
     let contentHeight = totalHeight - 2 * borderSize;
 
@@ -56,7 +56,7 @@ class Gui {
     let totalWidth = this.remainingWidth * 0.35;
     let totalHeight = this.contentHeight;
 
-    let borderSize = this.contentWidth * 0.003;
+    let borderSize = this.contentWidth * 0.0025;
     let contentWidth = totalWidth - borderSize;
     let contentHeight = totalHeight - 2 * borderSize;
 
@@ -71,7 +71,7 @@ class Gui {
     let totalWidth = parentContainer.clientWidth;
     let totalHeight = parentContainer.clientHeight * 0.25;
 
-    let marginSize = this.contentWidth * 0.006;
+    let marginSize = this.contentWidth * 0.00625;
     let borderSize = this.contentWidth * 0.0015;
     let contentWidth = totalWidth - 2 * marginSize -  2 * borderSize;
     let contentHeight = totalHeight - 2 * marginSize + 0.25 * (3 * marginSize) - 2 * borderSize;
@@ -92,13 +92,15 @@ class Gui {
 
   initialize_right_sidebar() {
     this.initialize_right_sidebar_container();
+    this.initialize_chat_box();
+    this.initialize_action_container();
   }
 
   initialize_right_sidebar_container() {
     let totalWidth = this.remainingWidth * 0.65;
     let totalHeight = this.contentHeight;
 
-    let borderSize = this.contentWidth * 0.003;
+    let borderSize = this.contentWidth * 0.0025;
     let contentWidth = totalWidth - borderSize;
     let contentHeight = totalHeight - 2 * borderSize;
 
@@ -108,9 +110,37 @@ class Gui {
     container.style.height = contentHeight + "px";
   }
 
-  // initialize_chat_box() {
-  //
-  // }
+  initialize_chat_box() {
+    let parentContainer = document.getElementById("right-sidebar-container");
+    let totalWidth = parentContainer.clientWidth;
+    let totalHeight = parentContainer.clientHeight * 0.35;
+
+    let borderSize = this.contentWidth * 0.0025;
+    let contentWidth = totalWidth;
+    let contentHeight = totalHeight - borderSize;
+
+    let container = document.getElementById("chat-box");
+    container.style.borderWidth = borderSize + "px";
+    container.style.width = contentWidth + "px";
+    container.style.height = contentHeight + "px";
+  }
+
+  initialize_action_container() {
+    let parentContainer = document.getElementById("right-sidebar-container");
+    let totalWidth = parentContainer.clientWidth;
+    let totalHeight = parentContainer.clientHeight * 0.65;
+
+    let marginSize = this.contentWidth * 0.00625;
+    let borderSize = this.contentWidth * 0.0015;
+    let contentWidth = totalWidth - 2 * marginSize -  2 * borderSize;
+    let contentHeight = totalHeight - 2 * marginSize - 2 * borderSize;
+
+    let container = document.getElementById("action-container");
+    container.style.margin = marginSize + "px";
+    container.style.borderWidth = borderSize + "px";
+    container.style.width = contentWidth + "px";
+    container.style.height = contentHeight + "px";
+  }
 }
 
 let gui = new Gui(window.innerWidth, window.innerHeight);
