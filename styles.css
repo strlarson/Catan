@@ -11,8 +11,9 @@ body {
 
 #board-canvas-container {
   border-style: double;
-
-  background-image: radial-gradient(#0077BE, #00008B);
+  background-color: #331200;
+  /* background-image: radial-gradient(#0077BE, #00008B); */
+  /* #2B65EC */
   /* background-color: #0077BE; */
 }
 
@@ -28,6 +29,7 @@ body {
 
   /* background-image: linear-gradient(to bottom right, #3498DB, #27AE60); */
   background-color:  #6F4E37;
+  /* transition: width 2s; */
 }
 
 .player-info-container {
@@ -51,7 +53,7 @@ body {
 #right-sidebar-container {
   border-style: solid solid solid none;
 
-  background-color: #6F4E37
+  background-color: #6F4E37;
 }
 
 #chat-box {
@@ -64,4 +66,16 @@ body {
   border-style: solid;
 
   background-color: #737CA1;
+}
+
+#left-sidebar-button {
+
+  position: absolute;
+  z-index: 1000;
+}
+
+#left-sidebar-button-drawing {
+  stroke-width: 4px;
+  stroke: #000000;
+  /* fill: #331200; */
 }
