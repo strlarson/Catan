@@ -7,22 +7,110 @@
   </head>
   <body>
     <div id="content-container">
-      <div id="left-sidebar-container">
-        <div id="player-1" class="player-info-container"></div>
-        <div id="player-2" class="player-info-container"></div>
-        <div id="player-3" class="player-info-container"></div>
-        <div id="player-4" class="player-info-container"></div>
+      <div id="left-sidebar-container" class="large-border">
+        <div id="player-1" class="player-info-container medium-border"></div>
+        <div id="player-2" class="player-info-container medium-border"></div>
+        <div id="player-3" class="player-info-container medium-border"></div>
+        <div id="player-4" class="player-info-container medium-border"></div>
       </div>
       <div id="board-canvas-container">
         <canvas id="board-canvas"></canvas>
+        <canvas id="top-canvas"></canvas>
       </div>
-      <div id="right-sidebar-container">
-        <div id="chat-box"></div>
-        <div id="action-container"></div>
+      <div id="right-sidebar-container" class="large-border">
+        <div id="chat-box" class="large-border"></div>
+        <div id="action-container">
+          <div class="action-button" id="spend-button">Build</div>
+          <div class="action-button" id="use-button">Use</div>
+          <div class="action-button" id="trade-button">Trade</div>
+          <div id="action-data">
+            <div id="icon-container">
+              <div id="icon-text-container" class="small-border">Available Resources</div>
+              <div class="icon small-border" id="brick-container">
+                <div class="resource-value small-border">0</div>
+                <img class="image" src="brick.png">
+              </div>
+              <div class="icon small-border" id="wood-container">
+                <div class="resource-value small-border">2</div>
+                <img class="image" src="wood2.png">
+              </div>
+              <div class="icon small-border" id="wheat-container">
+                <div class="resource-value small-border">0</div>
+                <img class="image" src="wheat.png">
+              </div>
+              <div class="icon small-border" id="sheep-container">
+                <div class="resource-value small-border">3</div>
+                <img class="image" src="sheep.png">
+              </div>
+              <div class="icon small-border" id="stone-container">
+                <div class="resource-value small-border">1</div>
+                <img class="image" src="stone.png">
+              </div>
+            </div>
+            <div id="spend-button-container" class="medium-border">
+              <div id="road-container" class="medium-border">
+                <div class="building-button medium-border">Build<br />Road</div>
+                <div class="icon2 medium-border" id="brick-container2">
+                  <div class="resource-value2 small-border">1</div>
+                  <img class="image" src="brick.png">
+                </div>
+                <div class="icon2 medium-border" id="wood-container2">
+                  <div class="resource-value2 small-border">1</div>
+                  <img class="image" src="wood2.png">
+                </div>
+              </div>
+              <div id="road-container" class="medium-border">
+                <div class="building-button medium-border">Build Settlement</div>
+                <div class="icon3 medium-border" id="brick-container3">
+                  <div class="resource-value2 small-border">1</div>
+                  <img class="image" src="brick.png">
+                </div>
+                <div class="icon3 medium-border" id="wood-container3">
+                  <div class="resource-value2 small-border">1</div>
+                  <img class="image" src="wood2.png">
+                </div>
+                <div class="icon3 medium-border" id="wheat-container3">
+                  <div class="resource-value2 small-border">1</div>
+                  <img class="image" src="wheat.png">
+                </div>
+                <div class="icon3 medium-border" id="sheep-container3">
+                  <div class="resource-value2 small-border">1</div>
+                  <img class="image" src="sheep.png">
+                </div>
+              </div>
+              <div id="road-container" class="medium-border">
+                <div class="building-button medium-border">Build<br />City</div>
+                <div class="icon2 medium-border" id="wheat-container4">
+                  <div class="resource-value2 small-border">2</div>
+                  <img class="image" src="wheat.png">
+                </div>
+                <div class="icon2 medium-border" id="stone-container4">
+                  <div class="resource-value2 small-border">3</div>
+                  <img class="image" src="stone.png">
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
       <svg id="left-sidebar-button" onclick="handleLeftSidebarButtonClick()">
         <circle id="left-sidebar-button-drawing" fill="#6F4E37" />
       </svg>
+      <svg id="right-sidebar-button" onclick="handleRightSidebarButtonClick()">
+        <circle id="right-sidebar-button-drawing" fill="#6F4E37" />
+      </svg>
+      <div id="card-count-container" class="large-border">
+      </div>
+    </div>
+    <script src="constants.js"></script>
+    <script src="drawing.js"></script>
+    <script src="logic.js"></script>
     <script src="gui.js"></script>
+    <script src="structure.js"></script>
+    <script src="main.js"></script>
   </body>
 </html>

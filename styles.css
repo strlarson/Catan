@@ -12,14 +12,29 @@ body {
 #board-canvas-container {
   border-style: double;
   background-color: #331200;
-  /* background-image: radial-gradient(#0077BE, #00008B); */
   /* #2B65EC */
-  /* background-color: #0077BE; */
+  /* background-color: #0077BE;
+  /* transition: width 2s; */
+  position: relative;
 }
 
-/* #board-canvas {
-  background-color: #0077BE;
-} */
+
+
+#board-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-image: radial-gradient(#0077BE, #00008B);
+  z-index: 0;
+}
+
+#top-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  /* background-image: radial-gradient(#0077BE, #00008B); */
+  z-index: 1;
+}
 
 #left-sidebar-container {
   /* display: flex;
@@ -29,6 +44,7 @@ body {
 
   /* background-image: linear-gradient(to bottom right, #3498DB, #27AE60); */
   background-color:  #6F4E37;
+
   /* transition: width 2s; */
 }
 
@@ -63,6 +79,8 @@ body {
 }
 
 #action-container {
+  display: inline-flex;
+  flex-wrap: wrap;
   border-style: solid;
 
   background-color: #737CA1;
@@ -72,10 +90,252 @@ body {
 
   position: absolute;
   z-index: 1000;
+  /* transition: width 2s; */
 }
 
 #left-sidebar-button-drawing {
   stroke-width: 4px;
   stroke: #000000;
   /* fill: #331200; */
+}
+
+#right-sidebar-button {
+
+  position: absolute;
+  z-index: 1000;
+}
+
+#right-sidebar-button-drawing {
+  stroke-width: 4px;
+  stroke: #000000;
+  /* fill: #331200; */
+}
+
+#card-count-container {
+  position: absolute;
+
+  z-index: 2000;
+  background-color:  #6F4E37;
+}
+
+.action-button {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 33.33%;
+  font-size: 1.1vw;
+  font-weight: bold;
+  font-family: sans-serif;
+  text-align: center;
+
+  /* padding: 0px; */
+  color: black;
+  background-color: #FFE4CD;
+  border-bottom: inherit;
+  border-right: inherit;
+  height: 8%;
+}
+
+#trade-button {
+  border-right: none;
+}
+
+
+
+#action-data {
+  display: inline-flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 92%;
+}
+
+#icon-container {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-wrap: wrap;
+
+  width: 100%;
+  height: 30%;
+}
+
+#icon-text-container {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  background-color: #6F4E37;
+  height: 20%;
+  width: 35%;
+  margin-right: 32.5%;
+  margin-left: 32.5%;
+  border-style: solid solid none solid;
+  font-size: .75vw;
+  font-weight: bold;
+  font-family: sans-serif;
+  color: #FFE4CD;
+}
+
+
+
+
+.icon {
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+
+  width: 20%;
+  height: 80%;
+  background-color: #331200; /* #6F4E37 */
+}
+
+#brick-container, #wood-container, #wheat-container, #sheep-container {
+  border-style: solid none solid solid;
+}
+
+#stone-container {
+  border-style: solid;
+}
+
+.image {
+
+  display: block;
+  margin: auto auto;
+  object-fit: scale-down;
+  height: 80%;
+}
+
+/* Make a class called smalll border, big border, etc */
+
+.small-border {
+  border-style: solid;
+  border-color: #000000;
+}
+
+.medium-border {
+  border-style: solid;
+  border-color: #000000;
+}
+
+.large-border {
+  border-style: solid;
+  border-color: #000000;
+}
+
+.resource-value {
+  position: absolute;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: #737CA1;
+  top: 0px;
+  width: 1.5vw;
+  height: 1.5vw;
+  left: 0px;
+  background-color: #FFE4CD;
+  z-index: 9000;
+
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 1.2vw;
+  font-weight: bold;
+  font-family: sans-serif;
+}
+
+#spend-button-container {
+  box-sizing: border-box;
+  width: 100%;
+  height: 70%;
+  /* background-color: red; */
+  border-style: solid none none none;
+}
+
+#road-container {
+  display: inline-flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 100%;
+  height: 25%;
+  border-style: none none solid none;
+  background-color: #331200;
+}
+
+.building-button {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+  height: 100%;
+  border-style: none solid none none;
+
+  font-size: 1.3vw;
+  font-weight: bold;
+  font-family: sans-serif;
+  text-align: center;
+
+  /* padding: 0px; */
+  color: black;
+  background-color: #85BB65;
+}
+
+#brick-container2, #wheat-container4 {
+  border-style: none solid none none;
+}
+
+#wood-container2, #stone-container4 {
+  border-style: none;
+}
+
+#brick-container3, #wood-container3, #wheat-container3 {
+  border-style: none solid none none;
+}
+
+#sheep-container3 {
+  border-style: none;
+}
+
+.icon2 {
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+
+  width: 37.5%;
+  height: 100%;
+  background-color: #6F4E37; /* #6F4E37 */
+}
+
+.icon3 {
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+
+  width: 18.75%;
+  height: 100%;
+  background-color: #6F4E37; /* #6F4E37 */
+}
+
+.resource-value2 {
+  position: absolute;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: #737CA1;
+  top: 0px;
+  width: 1.3vw;
+  height: 1.3vw;
+  left: 0px;
+  background-color: #FFE4CD;
+  z-index: 9000;
+
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 1vw;
+  font-weight: bold;
+  font-family: sans-serif;
 }

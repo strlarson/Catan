@@ -1,0 +1,13 @@
+#c1 {
+  z-index: 250;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#c2 {
+  z-index: 500;
+  position: absolute;
+  left: 0;
+  top: 0;
+}

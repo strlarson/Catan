@@ -4,14 +4,21 @@ class Gui {
     this.contentHeight = contentHeight;
     this.leftSidebarOpen = leftSidebarOpen;
     this.rightSidebarOpen = rightSidebarOpen;
+    this.realSize = 0;
+    this.leftSidebarWidth = 0;
+    this.rightSidebarWidth = 0;
 
-    this.remainingWidth = this.contentWidth;
+    this.smallBorderSize =  2;
+    this.mediumBorderSize = 2;
+    this.largeBorderSize = 4;
 
     this.initalize();
   }
 
   initalize() {
-    console.log("---");
+    this.initialize_small_borders();
+    this.initialize_medium_borders();
+    this.initialize_large_borders();
     this.initialize_board();
     this.initialize_left_sidebar();
     this.initialize_right_sidebar();
@@ -19,7 +26,9 @@ class Gui {
 
     //test
     this.initialize_left_sidebar_button();
+    this.initialize_right_sidebar_button();
 
+    this.initialize_card_count_container();
   }
 
   initialize_board() {
@@ -27,24 +36,93 @@ class Gui {
     this.initialize_board_canvas();
   }
 
+  initialize_icon_container() {
+    let padding = (this.contentWidth * 0.00625) * 0.75;
+    let container = document.getElementById("icon-container");
+    container.style.padding = padding + "px";
+  }
+
+  initialize_small_borders() {
+    let elements = document.getElementsByClassName("small-border");
+    for(let i = 0; i < elements.length; ++i) {
+      let element = elements[i];
+      element.style.borderWidth = this.smallBorderSize + "px";
+    }
+  }
+
+  initialize_medium_borders() {
+    let elements = document.getElementsByClassName("medium-border");
+    for(let i = 0; i < elements.length; ++i) {
+      let element = elements[i];
+      element.style.borderWidth = this.mediumBorderSize + "px";
+    }
+  }
+
+  initialize_large_borders() {
+    let elements = document.getElementsByClassName("large-border");
+    for(let i = 0; i < elements.length; ++i) {
+      let element = elements[i];
+      element.style.borderWidth = this.largeBorderSize + "px";
+    }
+  }
+
+
+  initialize_card_count_container() {
+    let container = document.getElementById("card-count-container");
+    let boardContainer = document.getElementById("board-canvas-container");
+
+    let totalWidth = this.realSize * 0.5;
+    let totalHeight = this.contentHeight * 0.08;
+    let xOffset = this.leftSidebarWidth + (parseInt(boardContainer.style.width, 10) / 2) - totalWidth / 2;
+    let yOffset = this.contentHeight - totalHeight;
+
+    let contentWidth = totalWidth - this.mediumBorderSize * 2;
+    let contentHeight = totalHeight - this.mediumBorderSize * 2;
+
+    container.style.width = contentWidth + "px";
+    container.style.height = contentHeight + "px";
+    container.style.left = xOffset + "px";
+    container.style.top = yOffset + "px";
+  }
+
   initialize_board_canvas_container() {
     let hexagonRadius = this.contentHeight / 10;
-    let totalWidth =  Math.ceil(6 * (Math.sqrt(3) * hexagonRadius));
+
+    let totalWidth =  Math.floor(6 * (Math.sqrt(3) * hexagonRadius));
+
+    this.realSize = totalWidth;
     let totalHeight = this.contentHeight;
 
-    let borderSize = Math.ceil(this.contentWidth * 0.0075);
-    let contentWidth = Math.ceil(totalWidth - 2 * borderSize);
-    let contentHeight = Math.ceil(totalHeight - 2 * borderSize);
+    if(this.leftSidebarOpen && this.rightSidebarOpen) {
+      this.leftSidebarWidth = Math.floor((this.contentWidth - totalWidth) * 0.35);
+      this.rightSidebarWidth = this.contentWidth - totalWidth - this.leftSidebarWidth;
+    } else if(this.leftSidebarOpen) {
+      this.leftSidebarWidth = Math.floor((this.contentWidth - totalWidth) * 0.35);
+      this.rightSidebarWidth = 0;
 
-    console.log(totalWidth, contentWidth, contentHeight);
+      totalWidth = this.contentWidth - this.leftSidebarWidth;
+    } else if(this.rightSidebarOpen) {
+      this.rightSidebarWidth = Math.floor((this.contentWidth - totalWidth) * 0.65);
+      this.leftSidebarWidth = 0;
+
+      totalWidth = this.contentWidth - this.rightSidebarWidth;
+    } else {
+      this.leftSidebarWidth = 0;
+      this.rightSidebarWidth = 0;
+
+      totalWidth = this.contentWidth;
+    }
+
+    let borderSize = 12;
+    let contentWidth = totalWidth - 2 * borderSize;
+    let contentHeight = totalHeight - 2 * borderSize;
+
+    // console.log(totalWidth, contentWidth, contentHeight);
 
     let container = document.getElementById("board-canvas-container");
     container.style.borderWidth = borderSize + "px";
     container.style.width = contentWidth + "px";
     container.style.height = contentHeight + "px";
-
-    this.remainingWidth -= Math.ceil(totalWidth);
-    console.log(this.remainingWidth);
   }
 
   initialize_board_canvas() {
@@ -55,6 +133,10 @@ class Gui {
     let canvas = document.getElementById("board-canvas");
     canvas.width = width;
     canvas.height = height;
+
+    let canvas2 = document.getElementById("top-canvas");
+    canvas2.width = width;
+    canvas2.height = height;
   }
 
   initialize_left_sidebar() {
@@ -62,32 +144,31 @@ class Gui {
       this.initialize_left_sidebar_container();
       this.initialize_player_info_containers();
     } else {
-      let canvasContainer = document.getElementById("board-canvas-container");
-      console.log(canvasContainer.style.width);
-      console.log(this.remainingWidth);
-      canvasContainer.style.width = Math.ceil(parseInt(canvasContainer.style.width, 10) + Math.floor(this.remainingWidth * 0.35)) + "px";
-      console.log(canvasContainer.style.width);
-
-      let canvas = document.getElementById("board-canvas");
-      canvas.width += Math.ceil(this.remainingWidth * 0.35);
-
-      let sidebar = document.getElementById("left-sidebar-container");
-      // console.log(sidebar);
-      sidebar.style.display = "none";
+      // this.initialize_left_sidebar_container();
+      // this.initialize_player_info_containers();
+      let container = document.getElementById("left-sidebar-container");
+      container.style.display = "none";
     }
   }
 
   initialize_left_sidebar_container() {
-    let totalWidth = Math.floor(this.remainingWidth * 0.35);
+    let totalWidth = this.leftSidebarWidth;
     let totalHeight = this.contentHeight;
 
-    let borderSize = Math.floor(this.contentWidth * 0.0025);
+    let borderSize = this.largeBorderSize;
+    // if(this.leftSidebarOpen) {
+    //   var borderSize = this.mediumBorderSize;
+    // } else {
+    //   var borderSize = 0;
+    // }
+
     let contentWidth = totalWidth - borderSize;
     let contentHeight = totalHeight - 2 * borderSize;
 
     let container = document.getElementById("left-sidebar-container");
     container.style.display = "";
-    container.style.borderWidth = borderSize + "px";
+
+
     container.style.width = contentWidth + "px";
     container.style.height = contentHeight + "px";
   }
@@ -98,7 +179,7 @@ class Gui {
     let totalHeight = parentContainer.clientHeight * 0.25;
 
     let marginSize = this.contentWidth * 0.00625;
-    let borderSize = this.contentWidth * 0.0015;
+    let borderSize = this.mediumBorderSize
     let contentWidth = totalWidth - 2 * marginSize -  2 * borderSize;
     let contentHeight = totalHeight - 2 * marginSize + 0.25 * (3 * marginSize) - 2 * borderSize;
 
@@ -106,7 +187,6 @@ class Gui {
     for(let i = 0; i < containers.length; ++i) {
       let container = containers[i];
       container.style.margin = marginSize + "px";
-      container.style.borderWidth = borderSize + "px";
       container.style.width = contentWidth + "px";
       container.style.height = contentHeight + "px";
 
@@ -121,37 +201,25 @@ class Gui {
       this.initialize_right_sidebar_container();
       this.initialize_chat_box();
       this.initialize_action_container();
+      this.initialize_icon_container();
+      // this.initialize_building_button_container();
     } else {
       let canvasContainer = document.getElementById("board-canvas-container");
-      canvasContainer.style.width = Math.ceil(parseInt(canvasContainer.style.width, 10) + Math.floor(this.remainingWidth * 0.65)) + "px";
-
-
-
-      let canvas = document.getElementById("board-canvas");
-      canvas.width += Math.ceil(this.remainingWidth * 0.65);
-
-      if(this.leftSidebarOpen) {
-        canvasContainer.style.width = Math.ceil(parseInt(canvasContainer.style.width, 10) - 3) + "px";
-        canvas.width -= 3;
-      }
-
       let sidebar = document.getElementById("right-sidebar-container");
-      // console.log(sidebar);
       sidebar.style.display = "none";
     }
   }
 
   initialize_right_sidebar_container() {
-    let totalWidth = Math.floor(this.remainingWidth * 0.65);
+    let totalWidth = this.rightSidebarWidth;
     let totalHeight = this.contentHeight;
 
-    let borderSize = Math.floor(this.contentWidth * 0.0025);
+    let borderSize = this.largeBorderSize;
     let contentWidth = totalWidth - borderSize;
     let contentHeight = totalHeight - 2 * borderSize;
 
     let container = document.getElementById("right-sidebar-container");
     container.style.display = "";
-    container.style.borderWidth = borderSize + "px";
     container.style.width = contentWidth + "px";
     container.style.height = contentHeight + "px";
   }
@@ -159,14 +227,14 @@ class Gui {
   initialize_chat_box() {
     let parentContainer = document.getElementById("right-sidebar-container");
     let totalWidth = parentContainer.clientWidth;
-    let totalHeight = parentContainer.clientHeight * 0.35;
+    let totalHeight = parentContainer.clientHeight * 0.4;
 
-    let borderSize = this.contentWidth * 0.0025;
+    let borderSize = this.largeBorderSize
     let contentWidth = totalWidth;
     let contentHeight = totalHeight - borderSize;
 
     let container = document.getElementById("chat-box");
-    container.style.borderWidth = borderSize + "px";
+    // container.style.borderWidth = borderSize + "px";
     container.style.width = contentWidth + "px";
     container.style.height = contentHeight + "px";
   }
@@ -174,10 +242,9 @@ class Gui {
   initialize_action_container() {
     let parentContainer = document.getElementById("right-sidebar-container");
     let totalWidth = parentContainer.clientWidth;
-    let totalHeight = parentContainer.clientHeight * 0.65;
-
+    let totalHeight = parentContainer.clientHeight * 0.6;
     let marginSize = this.contentWidth * 0.00625;
-    let borderSize = this.contentWidth * 0.0015;
+    let borderSize = Math.ceil(this.contentWidth * 0.0015);
     let contentWidth = totalWidth - 2 * marginSize -  2 * borderSize;
     let contentHeight = totalHeight - 2 * marginSize - 2 * borderSize;
 
@@ -193,56 +260,51 @@ class Gui {
     let leftSidebar = document.getElementById("left-sidebar-container");
     let canvasContainer = document.getElementById("board-canvas-container");
 
+
     let width = this.contentWidth * 0.03;
     let height = width;
 
     let button = document.getElementById("left-sidebar-button");
     if(this.leftSidebarOpen) {
-      button.style.left = leftSidebar.offsetWidth + parseInt(canvasContainer.style.borderLeftWidth, 10) / 3 + "px";
+      button.style.left = this.leftSidebarWidth + parseInt(canvasContainer.style.borderLeftWidth, 10) / 3 + "px";
     } else {
       button.style.left = parseInt(canvasContainer.style.borderLeftWidth, 10) / 3 + "px";
     }
     button.style.top = this.contentHeight / 2 - (height / 2);
 
-    button.setAttribute("width", String(width / 2 + 5));
-    button.setAttribute("height", String(height + 10));
+    button.setAttribute("width", String(width / 2));
+    button.setAttribute("height", String(height));
 
     let drawing = document.getElementById("left-sidebar-button-drawing");
     drawing.setAttribute("cx", 0);
-    drawing.setAttribute("cy", height / 2 + 2);
+    drawing.setAttribute("cy", height / 2);
+    drawing.setAttribute("r", width / 2);
+  }
+
+  initialize_right_sidebar_button() {
+
+    let rightSidebar = document.getElementById("right-sidebar-container");
+    let canvasContainer = document.getElementById("board-canvas-container");
+
+    let width = this.contentWidth * 0.03;
+    let height = width;
+
+    let button = document.getElementById("right-sidebar-button");
+    if(this.rightSidebarOpen) {
+      button.style.left = this.contentWidth - this.rightSidebarWidth - parseInt(canvasContainer.style.borderRightWidth, 10) / 3 - width / 2 + "px";
+    } else {
+      button.style.left = this.contentWidth - parseInt(canvasContainer.style.borderRightWidth, 10) / 3 - width / 2 + "px";
+    }
+    button.style.top = this.contentHeight / 2 - (height / 2);
+
+    button.setAttribute("width", String(width / 2));
+    button.setAttribute("height", String(height));
+
+    let drawing = document.getElementById("right-sidebar-button-drawing");
+    drawing.setAttribute("cx", width / 2);
+    drawing.setAttribute("cy", height / 2);
     drawing.setAttribute("r", width / 2);
   }
 
 
-}
-
-let lS = false;
-let gui = new Gui(window.innerWidth, window.innerHeight, lS, false);
-drawGradient();
-
-window.onresize = function(event) {
-   gui = new Gui(window.innerWidth, window.innerHeight, lS, true);
-   drawGradient();
-}
-
-function drawGradient() {
-  let canvas = document.getElementById("board-canvas");
-  let ctx = canvas.getContext("2d");
-
-  let grd = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.width / 3, canvas.width / 2, canvas.height / 2, canvas.width / 1.4);
-  grd.addColorStop(0, "#0077BE");
-  grd.addColorStop(1, "#00008B");
-
-  ctx.fillStyle = grd;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-
-function handleLeftSidebarButtonClick() {
-  if(lS) {
-    lS = false;
-  } else {
-    lS = true;
-  }
-  gui = new Gui(window.innerWidth, window.innerHeight, lS, true);
-  drawGradient();
 }

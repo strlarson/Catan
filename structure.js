@@ -39,8 +39,7 @@ class Board {
 
   generateTiles(terrains, values) {
     for(let tileId = 0; tileId < this.tiles.length; ++tileId) {
-      // let tile = new Tile(tileId, terrains[tileId], values[tileId], Board.ADJACENT_TILES_LIST[tileId]);
-      let tile = new Tile(tileId, "Forest", 8, Board.ADJACENT_TILES[tileId]);
+      let tile = new Tile(tileId, terrains[tileId], values[tileId], Board.ADJACENT_TILES[tileId]);
       this.tiles[tileId] = tile;
     }
   }
@@ -103,7 +102,3 @@ class Edge {
       this.value = Math.floor(Math.random() * 2);
     }
 }
-
-var board = new Board([], []);
-board.initialize();
-console.log(board);
